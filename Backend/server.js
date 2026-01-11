@@ -25,7 +25,8 @@ app.use('/auth',authRouter)
 
 const Initialize_db_Connection=async()=>{
     try{
-        await Promise.all([master(),redisClient.connect()]);
+        // await Promise.all([master(),redisClient.connect()]);
+        await Promise.all([master()]);
         console.log('Both database connected succesfully')
         app.listen(process.env.BACKEND_PORT,()=>{
             console.log(`Server listening at port: ${process.env.BACKEND_PORT}`)
