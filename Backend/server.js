@@ -6,7 +6,7 @@ import { redisClient } from './src/config/redisDb.js';
 import { master } from './src/config/db.js';
 import gigRouter from './src/routes/gig.route.js';
 import authRouter from './src/routes/auth.route.js';
-
+import gigBuyerRouter from './src/routes/gig.buyer.route.js';
 
 const app=express();
 
@@ -17,6 +17,7 @@ app.use(cookieParser())
 
 
 app.use('/seller',gigRouter);
+app.use('/buyer',gigBuyerRouter)
 app.use('/auth',authRouter)
 
 // app.listen(process.env.BACKEND_PORT,()=>{

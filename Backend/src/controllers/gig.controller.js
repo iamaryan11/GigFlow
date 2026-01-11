@@ -33,9 +33,12 @@ export const deleteGig = async (req, res, next) => {
   }
 };
 
+
+// we will be using path parameter as we are fetching gigs using single source i.e by id so it will be buyer/gigs/aSu329390039901 and not ? which is for query params
 export const getGig = async (req, res, next) => {
   try {
     const gig = await Gig.findById(req.params.id);
+    // console.log(req.params.id) --> coming undefined
     if (!gig) return next(createError(404, "Gig not found!"));
     res.status(200).send(gig);
   } catch (err) {
