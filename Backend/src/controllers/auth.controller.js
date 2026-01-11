@@ -20,6 +20,7 @@ export const register = async (req, res, next) => {
             ...req.body,
             password: hashedPassword,
         });
+        // console.log(...req.body)
 
         await newUser.save();
         res.status(201).send("User has been created successfully!");
