@@ -1,17 +1,21 @@
 import dotenv from 'dotenv'
 dotenv.config();
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { redisClient } from './src/config/redisDb.js';
 import { master } from './src/config/db.js';
-
+import gigRouter from './src/routes/gig.route.js';
 
 
 const app=express();
 
 
 
-app.use(express.json())
+app.use(express.json());
+app.use(cookieParser())
 
+
+app.use('/seller',gigRouter)
 
 // app.listen(process.env.BACKEND_PORT,()=>{
 //     console.log(`Server running at port ${process.env.BACKEND_PORT}`)
