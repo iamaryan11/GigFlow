@@ -1,4 +1,5 @@
 import { Gig } from "../models/Gig.model.js";
+import { User } from "../models/User.model.js";
 import { createError } from "../middleware/errorProvider.js";
 
 export const createGig = async (req, res, next) => {
@@ -10,7 +11,8 @@ export const createGig = async (req, res, next) => {
   });
 
   try {
-    const savedGig = await newUser.save(); // wait, use newGig.save()
+    // const savedGig = await newUser.save(); // wait, use newGig.save()
+    // const savedGig=await User.save()
     const savedGigActual = await newGig.save();
     res.status(201).json(savedGigActual);
   } catch (err) {
