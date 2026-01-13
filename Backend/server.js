@@ -20,7 +20,7 @@ import { fullapplimiter } from "./src/middleware/globalRateLimit.js";
 const app = express();
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://gigflow-m9to.onrender.com/",
     methods:["GET","POST","PUT","DELETE","PATCH","UPDATE"],
     credentials: true,
   })
