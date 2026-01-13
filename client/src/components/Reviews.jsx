@@ -6,16 +6,17 @@ import Review from "./Review";
 const Reviews = ({ gigId }) => {
   const queryClient = useQueryClient();
 
-  // 1. Fetch all reviews for this gig
+//  fetch all the reviews: (we use useQuery for reading purposes)
   const { isLoading, error, data } = useQuery({
     queryKey: ["reviews", gigId],
-    queryFn: () => newRequest.get(`/reviews/${gigId}`).then((res) => res.data),
+    queryFn: () =>
+      newRequest.get(`/api/reviews/${gigId}`).then((res) => res.data),
   });
 
-  // 2. Mutation for adding a new review
+  // 2. Mutation for adding a new review, for CUD operations
   const mutation = useMutation({
     mutationFn: (review) => {
-      return newRequest.post("/reviews", review);
+      return newRequest.post("/api/reviews", review);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["reviews", gigId]);
@@ -33,21 +34,19 @@ const Reviews = ({ gigId }) => {
   return (
     <div className="mt-16 space-y-8">
       <h2 className="text-2xl font-bold">Reviews</h2>
-      
-      {isLoading ? (
-        "Loading reviews..."
-      ) : error ? (
-        "Something went wrong!"
-      ) : (
-        data.map((review) => <Review key={review._id} review={review} />)
-      )}
+
+      {isLoading
+        ? "Loading reviews..."
+        : error
+        ? "Something went wrong!"
+        : data.map((review) => <Review key={review._id} review={review} />)}
 
       {/* Add Review Form */}
       <div className="bg-slate-50 p-8 rounded-3xl mt-12 border border-dashed border-slate-200">
         <h3 className="text-lg font-bold mb-4">Leave a Review</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <textarea 
-            placeholder="Share your experience with this seller..." 
+          <textarea
+            placeholder="Share your experience with this seller..."
             className="textarea textarea-bordered w-full h-32"
             required
           />
@@ -57,9 +56,12 @@ const Reviews = ({ gigId }) => {
               <option value={2}>2 Stars (Fair)</option>
               <option value={3}>3 Stars (Good)</option>
               <option value={4}>4 Stars (Very Good)</option>
-              <option value={5} selected>5 Stars (Excellent)</option>
+              <option value={5}>5 Stars (Excellent)</option>
             </select>
-            <button className="btn btn-primary px-10" disabled={mutation.isLoading}>
+            <button
+              className="btn btn-primary px-10"
+              disabled={mutation.isLoading}
+            >
               {mutation.isLoading ? "Posting..." : "Send"}
             </button>
           </div>

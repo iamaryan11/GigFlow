@@ -7,8 +7,6 @@ export const verifyToken = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_KEY, (err, payload) => {
         if (err) return next(createError(403, "Token is not valid!"));
-        
-        // Attach the decoded payload (id and isSeller) to the request object
         req.userId = payload.id;
         req.isSeller = payload.isSeller;
         next();

@@ -1,9 +1,8 @@
 import express from 'express';
 const gigBuyerRouter=express.Router();
-import { createGig,getGig } from '../controllers/gig.controller.js';
+import { createGig,getGig, getGigs } from '../controllers/gig.controller.js';
 import { verifyToken } from '../middleware/jwt.js';
-
-// normal fetch gig (no filter)
-gigBuyerRouter.get('/gig/:id',verifyToken,getGig)
+gigBuyerRouter.get('/gig/:id',getGig)
+gigBuyerRouter.get('/', getGigs);
 
 export default gigBuyerRouter;

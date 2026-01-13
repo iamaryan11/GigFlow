@@ -27,7 +27,7 @@ const gigSchema = new Schema({
     cat: {
         type: String,
         required: true,
-        index: true, // Speeds up search by category
+        index: true, 
     },
     price: {
         type: Number,

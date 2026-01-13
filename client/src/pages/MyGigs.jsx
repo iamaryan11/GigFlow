@@ -7,15 +7,11 @@ import { Trash2, ExternalLink, Plus } from "lucide-react";
 const MyGigs = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const queryClient = useQueryClient();
-
-  // 1. Fetch only MY gigs
   const { isLoading, error, data } = useQuery({
-    queryKey: ["myGigs"],
-    queryFn: () =>
-      newRequest.get(`/gigs?userId=${currentUser._id}`).then((res) => res.data),
-  });
-
-  // 2. Delete mutation
+  queryKey: ["myGigs", currentUser._id],
+  queryFn: () =>
+    newRequest.get(`/view/gigs?userId=${currentUser._id}`).then((res) => res.data),
+});
   const mutation = useMutation({
     mutationFn: (id) => newRequest.delete(`/gigs/${id}`),
     onSuccess: () => {
@@ -49,7 +45,7 @@ const MyGigs = () => {
         ) : error ? (
           "Something went wrong!"
         ) : (
-          <div className="bg-white rounded-[2rem] shadow-xl overflow-hidden border border-slate-100">
+          <div className="bg-white rounded-2rem shadow-xl overflow-hidden border border-slate-100">
             <table className="table w-full border-collapse">
               <thead>
                 <tr className="bg-slate-900 text-white h-16 border-none">
@@ -73,7 +69,7 @@ const MyGigs = () => {
                     <td className="font-bold text-slate-700 max-w-xs truncate">
                       {gig.title}
                     </td>
-                    <td className="text-slate-500 font-medium">${gig.price}</td>
+                    <td className="text-slate-500 font-medium">₹{gig.price}</td>
                     <td className="text-center font-semibold text-slate-400">
                       {gig.sales || 0}
                     </td>

@@ -24,10 +24,11 @@ const userSchema = new Schema({
         type: String,
         default: "https://i.ibb.co/4pDNDk1/avatar.png"
     },
-    country: {
-        type: String,
-        required: true,
-    },
+   country: {
+    type: String,
+    required: false, 
+    default: "Global"
+},
     phone: {
         type: String,
     },

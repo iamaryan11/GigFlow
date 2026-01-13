@@ -3,7 +3,8 @@ import { User } from "../models/User.model.js";
 import { createError } from "../middleware/errorProvider.js";
 
 export const createGig = async (req, res, next) => {
-  if (!req.isSeller) return next(createError(403, "Only sellers can create a gig!"));
+  if (!req.isSeller)
+    return next(createError(403, "Only sellers can create a gig!"));
 
   const newGig = new Gig({
     userId: req.userId,
@@ -11,8 +12,6 @@ export const createGig = async (req, res, next) => {
   });
 
   try {
-    // const savedGig = await newUser.save(); // wait, use newGig.save()
-    // const savedGig=await User.save()
     const savedGigActual = await newGig.save();
     res.status(201).json(savedGigActual);
   } catch (err) {
@@ -23,8 +22,10 @@ export const createGig = async (req, res, next) => {
 export const deleteGig = async (req, res, next) => {
   try {
     const gig = await Gig.findById(req.params.id);
-    if (gig.userId !== req.userId)
+    if (!gig) return next(createError(404, "Gig not found!"));
+    if (gig.userId !== req.userId) {
       return next(createError(403, "You can delete only your gig!"));
+    }
 
     await Gig.findByIdAndDelete(req.params.id);
     res.status(200).send("Gig has been deleted!");
@@ -33,12 +34,9 @@ export const deleteGig = async (req, res, next) => {
   }
 };
 
-
-// we will be using path parameter as we are fetching gigs using single source i.e by id so it will be buyer/gigs/aSu329390039901 and not ? which is for query params
 export const getGig = async (req, res, next) => {
   try {
     const gig = await Gig.findById(req.params.id);
-    // console.log(req.params.id) --> coming undefined
     if (!gig) return next(createError(404, "Gig not found!"));
     res.status(200).send(gig);
   } catch (err) {
@@ -48,7 +46,6 @@ export const getGig = async (req, res, next) => {
 
 export const getGigs = async (req, res, next) => {
   const q = req.query;
-  // This dynamic filter is the "Standout" part
   const filters = {
     ...(q.userId && { userId: q.userId }),
     ...(q.cat && { cat: q.cat }),

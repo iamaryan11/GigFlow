@@ -16,21 +16,23 @@ const Orders = () => {
   const handleContact = async (order) => {
     const sellerId = order.sellerId;
     const buyerId = order.buyerId;
-    const id = sellerId + buyerId; // Unique conversation ID logic
+
+    // BE logic-->[SellerId] + [BuyerId] (i have implemented the models and controller in this way)
+    const convId = sellerId + buyerId;
 
     try {
-      const res = await newRequest.get(`/conversations/single/${id}`);
+      // 1. Check if it exists
+      const res = await newRequest.get(`/api/conversations/single/${convId}`);
       navigate(`/message/${res.data.id}`);
     } catch (err) {
       if (err.response.status === 404) {
-        const res = await newRequest.post(`/conversations`, {
+        const res = await newRequest.post(`/api/conversations`, {
           to: currentUser.isSeller ? buyerId : sellerId,
         });
         navigate(`/message/${res.data.id}`);
       }
     }
   };
-
   return (
     <div className="min-h-screen bg-slate-50 pt-28 pb-20 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -42,27 +44,40 @@ const Orders = () => {
         </div>
 
         {isLoading ? (
-          <div className="flex justify-center py-20"><span className="loading loading-spinner loading-lg text-primary"></span></div>
+          <div className="flex justify-center py-20">
+            <span className="loading loading-spinner loading-lg text-primary"></span>
+          </div>
         ) : error ? (
-          <div className="alert alert-error shadow-lg">Error loading orders.</div>
+          <div className="alert alert-error shadow-lg">
+            Error loading orders.
+          </div>
         ) : (
           <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
             <table className="table w-full">
               {/* Table Head */}
               <thead className="bg-slate-900 text-white border-none">
                 <tr className="h-16">
-                  <th className="pl-8 uppercase text-xs tracking-widest">Image</th>
+                  <th className="pl-8 uppercase text-xs tracking-widest">
+                    Image
+                  </th>
                   <th className="uppercase text-xs tracking-widest">Title</th>
                   <th className="uppercase text-xs tracking-widest">Price</th>
-                  <th className="uppercase text-xs tracking-widest">{currentUser.isSeller ? "Buyer" : "Seller"}</th>
-                  <th className="pr-8 uppercase text-xs tracking-widest">Contact</th>
+                  <th className="uppercase text-xs tracking-widest">
+                    {currentUser.isSeller ? "Buyer" : "Seller"}
+                  </th>
+                  <th className="pr-8 uppercase text-xs tracking-widest">
+                    Contact
+                  </th>
                 </tr>
               </thead>
-              
+
               {/* Table Body */}
               <tbody className="divide-y divide-slate-100">
                 {data.map((order) => (
-                  <tr key={order._id} className="hover:bg-slate-50 transition-colors group">
+                  <tr
+                    key={order._id}
+                    className="hover:bg-slate-50 transition-colors group"
+                  >
                     <td className="pl-8 py-4">
                       <img
                         className="w-16 h-10 object-cover rounded-lg shadow-sm group-hover:scale-105 transition-transform"
@@ -71,19 +86,21 @@ const Orders = () => {
                       />
                     </td>
                     <td className="font-bold text-slate-700">{order.title}</td>
-                    <td className="text-slate-500 font-medium">${order.price}</td>
+                    <td className="text-slate-500 font-medium">
+                      ₹{order.price}
+                    </td>
                     <td>
                       <div className="flex items-center gap-2">
-                         <div className="w-6 h-6 bg-slate-200 rounded-full flex items-center justify-center text-slate-400">
-                           <User size={14} />
-                         </div>
-                         <span className="text-sm font-semibold text-slate-600 uppercase tracking-tight">
-                            {currentUser.isSeller ? "Client" : "Pro Seller"}
-                         </span>
+                        <div className="w-6 h-6 bg-slate-200 rounded-full flex items-center justify-center text-slate-400">
+                          <User size={14} />
+                        </div>
+                        <span className="text-sm font-semibold text-slate-600 uppercase tracking-tight">
+                          {currentUser.isSeller ? "Client" : "Pro Seller"}
+                        </span>
                       </div>
                     </td>
                     <td className="pr-8">
-                      <button 
+                      <button
                         onClick={() => handleContact(order)}
                         className="btn btn-circle btn-ghost text-primary hover:bg-primary hover:text-white transition-all"
                       >
@@ -94,11 +111,15 @@ const Orders = () => {
                 ))}
               </tbody>
             </table>
-            
+
             {data.length === 0 && (
               <div className="p-20 text-center space-y-4">
-                <div className="text-slate-200 flex justify-center"><Package size={80} /></div>
-                <p className="text-slate-400 text-lg font-medium">No orders found. Time to make some moves!</p>
+                <div className="text-slate-200 flex justify-center">
+                  <Package size={80} />
+                </div>
+                <p className="text-slate-400 text-lg font-medium">
+                  No orders found. Time to make some moves!
+                </p>
               </div>
             )}
           </div>
