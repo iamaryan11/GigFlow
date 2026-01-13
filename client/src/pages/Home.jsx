@@ -1,14 +1,19 @@
 import React from 'react';
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from 'react-router-dom';
 import newRequest from "../utils/newRequest";
-import GigCard from "../components/GigCard";
-
+import GigCard from "../components/GigCard";  
+import { useState } from 'react';
+import BecomeSeller from '../components/BecomeSeller';
 const Home = () => {
+
   // TanStack Query for the "Server State"
   const { isLoading, error, data } = useQuery({
     queryKey: ["gigs"],
-    queryFn: () => newRequest.get("/gigs").then((res) => res.data),
+    queryFn: () => newRequest.get("/view/gigs").then((res) => res.data),
   });
+
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const categories = [
     { name: "Graphics & Design", slug: "design" },
@@ -17,6 +22,14 @@ const Home = () => {
     { name: "Video & Animation", slug: "video" },
     { name: "Programming & Tech", slug: "tech" },
   ];
+
+    const [input, setInput] = useState("");
+const navigate = useNavigate();
+
+// const handleSubmit = () => {
+//   // This takes the user to /gigs?search=web design
+//   navigate(`/buyer/gigs?search=${input}`);
+// };
 
   return (
     <div className="bg-base-100 min-h-screen">
@@ -32,7 +45,7 @@ const Home = () => {
       {/* Centering the Search Bar */}
       <div className="join w-full max-w-md mx-auto"> 
         <input className="input input-bordered join-item w-full text-black" placeholder="Try 'building a website'" />
-        <button className="btn btn-primary join-item">Search</button>
+        <button  className="btn btn-primary join-item">Search</button>
       </div>
 
       {/* Centering the Popular Tags */}
@@ -90,6 +103,8 @@ const Home = () => {
           </div>
         )}
       </div>
+
+          {!currentUser?.isSeller && <BecomeSeller />}
 
       {/* 4. CTA SECTION (To stand out) */}
       <div className="container mx-auto px-4 py-16">

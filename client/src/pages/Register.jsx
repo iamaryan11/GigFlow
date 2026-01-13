@@ -42,7 +42,7 @@ const Register = () => {
       <div className="hidden lg:flex w-1/2 bg-slate-900 p-12 flex-col justify-between text-white">
         <div>
           <Link to="/" className="flex items-center gap-2 text-primary font-bold text-2xl">
-            <div className="w-8 h-8 bg-primary rounded-lg"></div>
+            <div className="w-8 h-8  bg-primary rounded-lg"></div>
             GigFlow.
           </Link>
         </div>
