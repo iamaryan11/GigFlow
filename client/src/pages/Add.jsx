@@ -4,7 +4,7 @@ import upload from "../utils/upload";
 import newRequest from "../utils/newRequest";
 import { Upload, X, Plus } from "lucide-react";
 
-// Using useReducer for complex form state management
+
 const INITIAL_STATE = {
   userId: JSON.parse(localStorage.getItem("currentUser"))?._id,
   title: "",
