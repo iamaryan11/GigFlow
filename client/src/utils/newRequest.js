@@ -1,6 +1,6 @@
 import axios from "axios";
 const newRequest = axios.create({
-  baseURL: "http://localhost:1111",
+  baseURL: "https://gigflow-backend-u2ul.onrender.com",
   withCredentials: true,
 });
 
