@@ -89,7 +89,7 @@ const GigCard = ({ item }) => {
             </span>
             <div className="flex items-center gap-1">
               <span className="text-2xl font-black text-slate-900">
-                ${item.price}
+                ₹{item.price}
               </span>
             </div>
           </div>
